@@ -26,6 +26,7 @@ exports.threadPost = (req, res, next) => {
             res.redirect('/b/' + req.params.board + '/');
         });
         doc.threads.push(newThread._id);
+        doc.save();
     });
 };
 
@@ -59,7 +60,7 @@ exports.threadDelete = (req, res, next) => {
         Thread.findById(req.body.thread_id)
         .exec((err, thread) => {
             if (err) console.log(err);
-            if (!thread) res.send ('no thread with id: ' + req.body.thread_id + ' found');
+            if (!thread) return res.send('no thread with id: ' + req.body.thread_id + ' found');
             if (req.body.delete_password === thread.delete_password) {
                 Thread.findByIdAndDelete(req.body.thread_id, (req, doc) => {
                     if (err) console.log(err);
@@ -78,7 +79,7 @@ exports.threadPut = (req, res, next) => {
         Thread.findById(req.body.report_id)
         .exec((err, thread) => {
             if (err) console.log(err);
-            if (!thread) res.send ('no thread with id: ' + req.body.report_id + ' found');
+            if (!thread) return res.send ('no thread with id: ' + req.body.report_id + ' found');
             thread.reported = true;
             thread.save();
             res.send('success');

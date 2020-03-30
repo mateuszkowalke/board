@@ -42,7 +42,7 @@ exports.replyDelete = (req, res, next) => {
     .populate('replies')
     .exec((err, thread) => {
         if (err) console.log(err);
-        if (!thread) res.send ('no thread with id: ' + req.body.report_id + ' found');
+        if (!thread) return res.send('no thread with id: ' + req.body.thread_id + ' found');
         const toDelete = thread.replies.find((reply) => String(reply._id) === req.body.reply_id);
         if (toDelete.delete_password === req.body.delete_password) {
             toDelete.text = '[deleted]';
@@ -58,7 +58,7 @@ exports.replyPut = (req, res, next) => {
     .populate('replies')
     .exec((err, thread) => {
         if (err) console.log(err);
-        if (!thread) res.send ('no thread with id: ' + req.body.report_id + ' found');
+        if (!thread) return res.send('no thread with id: ' + req.body.thread_id + ' found');
         const toUpdate = thread.replies.find((reply) => String(reply._id) === req.body.reply_id);
         toUpdate.reported = true;
         toUpdate.save();
