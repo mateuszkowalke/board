@@ -6,12 +6,17 @@ var expect      = require('chai').expect;
 var cors        = require('cors');
 const dotenv = require('dotenv').config();
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 
 var apiRoutes         = require('./routes/api.js');
 var fccTestingRoutes  = require('./routes/fcctesting.js');
 var runner            = require('./test-runner');
 
 var app = express();
+
+app.use(helmet.frameguard({ action: 'sameorigin' }));
+app.use(helmet.dnsPrefetchControl());
+app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
